@@ -7,3 +7,8 @@ docs/*
 blog
 blog.*
 publish*
+package-lock.json
+go.sum
+vendor
+.idea
+go.sum
