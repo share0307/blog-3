@@ -4,6 +4,7 @@ import (
 	"blog/conf"
 	"log"
 	"strings"
+	"time"
 
 	"xorm.io/xorm"
 	"xorm.io/xorm/caches"
@@ -16,6 +17,9 @@ import (
 // Db 数据库操作句柄
 var Db *xorm.Engine
 
+/**
+	初始化模型，包括数据库链接什么的
+ */
 func Init() {
 	// 初始化数据库操作的 Xorm
 	db, err := xorm.NewEngine("mysql", conf.App.Dsn())
@@ -25,12 +29,17 @@ func Init() {
 	if err = db.Ping(); err != nil {
 		log.Fatalln("数据库 ping:", err.Error())
 	}
+
+	// 最大得空闲链接
 	db.SetMaxIdleConns(conf.App.Xorm.Idle)
+	// 最多打开的数据库链接数量
 	db.SetMaxOpenConns(conf.App.Xorm.Open)
+	// 设置链接最大的声明周期
+	db.SetConnMaxLifetime(time.Duration(conf.App.Xorm.ConnMaxLifetime) * time.Second)
 	// 是否显示sql执行的语句
 	db.ShowSQL(conf.App.Xorm.Show)
 	if conf.App.Xorm.CacheEnable {
-		// 设置xorm缓存
+		// 设置xorm缓存，基于lru算法
 		cacher := caches.NewLRUCacher(caches.NewMemoryStore(), conf.App.Xorm.CacheCount)
 		db.SetDefaultCacher(cacher)
 	}

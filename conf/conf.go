@@ -41,6 +41,7 @@ type appconf struct {
 		Sync        bool `toml:"sync"`
 		CacheEnable bool `toml:"cache_enable"`
 		CacheCount  int  `toml:"cache_count"`
+		ConnMaxLifetime  int  `toml:"conn_max_lifetime"`
 	} `toml:"xorm"`
 }
 
