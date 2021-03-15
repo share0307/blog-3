@@ -11,6 +11,7 @@ import (
 
 // RunApp 入口
 func RunApp() {
+	// 使用echo框架
 	engine := echo.New()
 	engine.Renderer = initRender()                    // 初始渲染引擎
 	engine.Use(midRecover, midLogger)                 // 恢复 日志记录

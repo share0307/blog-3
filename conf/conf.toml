@@ -31,5 +31,5 @@ show = true
 sync = false
 cache_enable = false
 cache_count = 1000
-conn_max_lifetime=86400
+conn_max_lifetime=1800
 
