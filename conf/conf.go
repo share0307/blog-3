@@ -7,6 +7,9 @@ import (
 	"github.com/zxysilent/logs"
 )
 
+/**
+	应用配置结构体，使用的是 toml 配置
+ */
 type appconf struct {
 	Title   string `toml:"title"`
 	Explain string `toml:"explain"`
@@ -18,7 +21,7 @@ type appconf struct {
 	Author  struct {
 		Name    string `toml:"name"`
 		Website string `toml:"website"`
-	} `toml:"author"`
+	} `toml:"author"`	// 结构体也是可以使用 tag 的
 	Wechat struct {
 		Appid  string `toml:"appid"`
 		Secret string `toml:"secret"`
@@ -41,9 +44,15 @@ type appconf struct {
 	} `toml:"xorm"`
 }
 
+/*
+	是否生成环境
+ */
 func (app *appconf) IsProd() bool {
 	return app.Mode == "prod"
 }
+/**
+	是否测试环境
+ */
 func (app *appconf) IsDev() bool {
 	return app.Mode == "dev"
 }
@@ -55,10 +64,15 @@ func (app *appconf) Dsn() string {
 }
 
 var (
+	// 全局变量
 	App       *appconf
+	// 应用配置目录
 	defConfig = "./conf/conf.toml"
 )
 
+/**
+	初始化，此Init是需要手工调用得，非 init 方法
+ */
 func Init() {
 	var err error
 	App, err = initConf()
@@ -69,7 +83,8 @@ func Init() {
 }
 
 func initConf() (*appconf, error) {
-	app := &appconf{}
+	// app := &appconf{}
+	app := new(appconf)	//与上面效果一样
 	_, err := toml.DecodeFile(defConfig, &app)
 	if err != nil {
 		return nil, err
